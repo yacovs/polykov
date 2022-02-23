@@ -2,9 +2,9 @@ package yacov.sapiashvili.polykov.ui.customviews.polygon
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Matrix
 import android.graphics.Paint
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import yacov.sapiashvili.polykov.R
@@ -14,19 +14,18 @@ class PolygonView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
+    private val ANIMATION_FPS = 60
+    private var startingRotation: Float = 0f
+
     var paint : Paint = Paint().apply {
         style = Paint.Style.FILL
         color = ResourcesCompat.getColor(resources, R.color.purple_500,null);
     }
-    var debugpaint : Paint = Paint().apply {
-        style = Paint.Style.STROKE
-        color = ResourcesCompat.getColor(resources, R.color.purple_700,null);
-        strokeWidth = 5f
-    }
+
+    var roatateMatrix :Matrix = Matrix()
     private var polyRadius = 1f
     private var rotationAmountPerFrame: Float = 0f
     private lateinit var callback: PolygonAnimationProgress
-    private val FPS_RATE_PER_SECOUND = 60
     var mAnimateOnDisplay: Boolean = false
     var numberOfPoint = 8 //default
     private val polygonGenerator: PolygonGenerator = PolygonGenerator()
@@ -34,29 +33,35 @@ class PolygonView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        Log.d("bla", "onDraw: ")
-        polygonGenerator.let { canvas.drawPath(polygonGenerator.path, paint) }
-        canvas.drawCircle(polygonGenerator.x,polygonGenerator.y,polyRadius,debugpaint)
-        checkForRotationAnimationStopCondition()
-        when(mAnimateOnDisplay){
-            true -> {invalidate()}
-            false -> {callback.animationComplete()}
-        }
-    }
+        val scaleFactor = polygonGenerator.recalculatePathScaling(width,height)
+        roatateMatrix.reset()
+        roatateMatrix.preRotate(
+            rotationAmountPerFrame,
+            polygonGenerator.polygonCenterX,
+            polygonGenerator.polygonCenterY)
 
-    private fun checkForRotationAnimationStopCondition() {
-        mAnimateOnDisplay = if (rotation < targetDegreeOfRotation) {
-            rotation +=rotationAmountPerFrame
-            true
-        }else{
-            false
+        roatateMatrix.postScale(
+            1f +scaleFactor,
+            1f +scaleFactor,
+            polygonGenerator.polygonCenterX,
+            polygonGenerator.polygonCenterY)
+
+        polygonGenerator.path.transform(roatateMatrix);
+        canvas.drawPath(polygonGenerator.path, paint)
+        mAnimateOnDisplay = startingRotation <= targetDegreeOfRotation
+        when(mAnimateOnDisplay){
+            true -> {
+                startingRotation += rotationAmountPerFrame
+                invalidate() // animation did not finished, recall onDraw until rotation complete
+            }
+            false -> {callback.animationComplete()}
         }
     }
 
     fun startRotation(angel: Float) {
         mAnimateOnDisplay = true
-        targetDegreeOfRotation = rotation + angel
-        rotationAmountPerFrame = angel / FPS_RATE_PER_SECOUND
+        targetDegreeOfRotation = startingRotation + angel
+        rotationAmountPerFrame = angel / ANIMATION_FPS
         if (width == 0 || height == 0) {
             return
         }
@@ -68,10 +73,12 @@ class PolygonView @JvmOverloads constructor(
         } else {
             width - polyCenterX
         }
-        polygonGenerator.setPolygon(polyCenterX, polyCenterY, polyRadius, numberOfPoint)
+        if(polygonGenerator.path.isEmpty)
+            polygonGenerator.generat(polyCenterX, polyCenterY, polyRadius, numberOfPoint)
         invalidate();
     }
 
+    // callback to the alert the views container for animation completed
     fun setAnimationCallback(callback: PolygonAnimationProgress) {
         this.callback = callback;
     }

@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class ScreenTwoViewModel : ViewModel() {
-    private val DEFAULT_INTERVAL = 10000
+    val DEFAULT_INTERVAL = 10000
     private val _animationInterval = MutableLiveData<Int>().apply {
         value = DEFAULT_INTERVAL
     }

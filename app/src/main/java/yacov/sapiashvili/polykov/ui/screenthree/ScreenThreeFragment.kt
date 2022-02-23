@@ -28,7 +28,6 @@ class ScreenThreeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        screenThreeViewModel.randomizeClickableButtons()
     }
     override fun getLayoutResourceID(): Int {
         return R.layout.fragment_screen_3

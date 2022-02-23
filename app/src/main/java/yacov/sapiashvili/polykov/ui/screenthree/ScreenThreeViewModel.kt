@@ -23,6 +23,9 @@ class ScreenThreeViewModel : ViewModel() {
     val button4state: LiveData<Boolean> = _button4state
     val button5state: LiveData<Boolean> = _button5state
 
+    init {
+        randomizeClickableButtons()
+    }
     fun randomizeClickableButtons(){
         viewModelScope.launch {
             delay(5000)

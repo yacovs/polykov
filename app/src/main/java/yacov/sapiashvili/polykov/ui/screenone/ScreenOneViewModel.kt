@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModel
 
 class ScreenOneViewModel : ViewModel() {
     private val _numberOfSides = MutableLiveData<Int>().apply {
-        value = 3
+        value = 8
     }
     private val _rotationDegree = MutableLiveData<Int>().apply {
-        value = 10
+        value = 15
     }
     val numberOfSides: LiveData<Int> = _numberOfSides
     val rotationDegree: LiveData<Int> = _rotationDegree

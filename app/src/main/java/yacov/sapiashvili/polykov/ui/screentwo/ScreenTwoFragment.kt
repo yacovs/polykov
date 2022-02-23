@@ -18,11 +18,11 @@ import yacov.sapiashvili.polykov.ui.BaseFragment
 import yacov.sapiashvili.polykov.ui.customviews.rectangle.RectangleView
 
 class ScreenTwoFragment : BaseFragment() {
-    val rootSet = AnimatorSet()
+    private val rootSet = AnimatorSet()
+    private var animationInterval : Long = 1000L
     private lateinit var screenTwoViewModel: ScreenTwoViewModel
     lateinit var rectangleView : RectangleView
-    var animationInterval : Long = 10000
-    
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         startViewAnimation()
@@ -52,7 +52,7 @@ class ScreenTwoFragment : BaseFragment() {
             val shrinkSet = AnimatorSet()
             shrinkSet.playTogether(scaleRX, scaleRY)
             rootSet.play(growSet).after(shrinkSet)
-            rootSet.duration = animationInterval
+            rootSet.duration = 1000
             rootSet.start()
             rootSet.doOnEnd { startViewAnimation() }
         }
