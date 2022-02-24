@@ -1,4 +1,4 @@
-package yacov.sapiashvili.polykov.ui.screenthree
+package yacov.sapiashvili.polykov.ui.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

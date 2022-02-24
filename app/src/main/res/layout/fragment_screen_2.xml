@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.screentwo.ScreenTwoFragment">
+    tools:context=".ui.fragments.ScreenTwoFragment">
 
     <yacov.sapiashvili.polykov.ui.customviews.rectangle.RectangleView
         android:id="@+id/rectangleView"

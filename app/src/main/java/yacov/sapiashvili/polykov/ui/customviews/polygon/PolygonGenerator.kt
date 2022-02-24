@@ -32,7 +32,7 @@ class PolygonGenerator {
         //find the closest point to the edges from the center of the polygon
         var minFromEnd : Float = (fullLength / 2).toFloat()
         var minFromStart : Float = (fullLength / 2).toFloat()
-        val pm = PathMeasure(path, true)
+        var pm = PathMeasure(path, true)
         //polygon vortices
         val vorticePoint = floatArrayOf(0f, 0f)
         //get coordinates of the middle point
@@ -43,8 +43,6 @@ class PolygonGenerator {
             if (vorticePoint[vorticesAxisIndex] < minFromStart)
                 minFromStart = vorticePoint[vorticesAxisIndex]
         }
-       // var offset =  (width - minFromEnd + minFromStart + 1) / width
-       // Log.d(TAG, "recalculatePathScaling: ")
         return  (fullLength - minFromEnd + minFromStart + 1) / fullLength;
     }
 

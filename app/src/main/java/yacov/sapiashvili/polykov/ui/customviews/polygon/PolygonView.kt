@@ -65,19 +65,22 @@ class PolygonView @JvmOverloads constructor(
         if (width == 0 || height == 0) {
             return
         }
+
+        if(polygonGenerator.path.isEmpty)
+            generatePoly(numberOfPoint = numberOfPoint)
+        invalidate();
+    }
+    fun generatePoly(polyCenterX: Float = width / 2.0f, polyCenterY: Float = height / 2.0f, numberOfPoint:Int){
+        this.numberOfPoint = numberOfPoint
+
         // get the center point of the polygon
-        val polyCenterX = width / 2.0f
-        val polyCenterY = height / 2.0f
         polyRadius = if (width > height) {
             height - polyCenterY
         } else {
             width - polyCenterX
         }
-        if(polygonGenerator.path.isEmpty)
-            polygonGenerator.generat(polyCenterX, polyCenterY, polyRadius, numberOfPoint)
-        invalidate();
+        polygonGenerator.generat(polyCenterX, polyCenterY, polyRadius, numberOfPoint)
     }
-
     // callback to the alert the views container for animation completed
     fun setAnimationCallback(callback: PolygonAnimationProgress) {
         this.callback = callback;

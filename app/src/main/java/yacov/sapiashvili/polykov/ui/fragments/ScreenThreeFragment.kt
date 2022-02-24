@@ -1,15 +1,13 @@
-package yacov.sapiashvili.polykov.ui.screenthree
+package yacov.sapiashvili.polykov.ui.fragments
 
-import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
-import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import yacov.sapiashvili.polykov.R
-import yacov.sapiashvili.polykov.ui.BaseFragment
+import yacov.sapiashvili.polykov.ui.viewmodels.ScreenThreeViewModel
 
 class ScreenThreeFragment : BaseFragment() {
 

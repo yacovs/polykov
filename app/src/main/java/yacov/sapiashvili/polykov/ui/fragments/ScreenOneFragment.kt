@@ -1,26 +1,22 @@
-package yacov.sapiashvili.polykov.ui.screenone
+package yacov.sapiashvili.polykov.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import yacov.sapiashvili.polykov.R
-import yacov.sapiashvili.polykov.ui.BaseFragment
 import yacov.sapiashvili.polykov.ui.customviews.polygon.PolygonAnimationProgress
 import yacov.sapiashvili.polykov.ui.customviews.polygon.PolygonView
+import yacov.sapiashvili.polykov.ui.viewmodels.MainViewModel
 
 
 class ScreenOneFragment : BaseFragment() , PolygonAnimationProgress {
 
-    private lateinit var screenOneViewModel: ScreenOneViewModel
+    private lateinit var screenOneViewModel: MainViewModel
     lateinit var polygonView: PolygonView
     lateinit var textView: TextView
     val TAG = "Shape"
@@ -35,14 +31,14 @@ class ScreenOneFragment : BaseFragment() , PolygonAnimationProgress {
     }
 
     override fun initUiElements(root: View) {
-        screenOneViewModel = ViewModelProvider(this).get(ScreenOneViewModel::class.java)
+        screenOneViewModel = activity?.let { ViewModelProvider(it).get(MainViewModel::class.java) }!!
         textView = root.findViewById(R.id.text_home)
         polygonView = root.findViewById(R.id.polykov)
         polygonView.setAnimationCallback(this)
     }
     override fun observeViewModel() {
         screenOneViewModel.numberOfSides.observe(viewLifecycleOwner, Observer {
-            polygonView.numberOfPoint = it
+            polygonView.generatePoly(numberOfPoint = it)
         })
         screenOneViewModel.rotationDegree.observe(viewLifecycleOwner, Observer {
             polygonView.targetDegreeOfRotation = it.toFloat()
@@ -61,7 +57,7 @@ class ScreenOneFragment : BaseFragment() , PolygonAnimationProgress {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         polygonView.mAnimateOnDisplay = false
+        super.onDestroyView()
     }
 }

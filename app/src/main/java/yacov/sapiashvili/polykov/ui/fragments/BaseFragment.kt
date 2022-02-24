@@ -1,4 +1,4 @@
-package yacov.sapiashvili.polykov.ui
+package yacov.sapiashvili.polykov.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
